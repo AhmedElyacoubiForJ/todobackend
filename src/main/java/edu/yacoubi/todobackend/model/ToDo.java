@@ -68,6 +68,13 @@ public class ToDo {
     private boolean favorite;
 
     @ManyToOne
-    @JoinColumn(name = "categoryId")
+    @JoinColumn(
+            name = "category_id",
+            nullable = false,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(
+                    name = "todo_category_fk"
+            )
+    )
     private Category category;
 }

@@ -74,7 +74,12 @@ public class User {
     )
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(
+            mappedBy = "user",
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            fetch = FetchType.LAZY
+    )
     private List<Category> categories;
 
     public User(String firstName,

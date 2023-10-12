@@ -49,6 +49,16 @@ public class Category {
     private List<ToDo> todos;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            referencedColumnName = "id",
+            // readability
+            // to rename a generated random name created by spring data framework
+            // so, it's the best practice to have a full control about our application
+            foreignKey = @ForeignKey(
+                    name = "user_category_fk"
+            )
+    )
     private User user;
 }
