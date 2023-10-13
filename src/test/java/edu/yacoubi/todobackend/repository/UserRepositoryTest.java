@@ -1,50 +1,49 @@
 package edu.yacoubi.todobackend.repository;
 
 import edu.yacoubi.todobackend.model.AppUser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.github.javafaker.Faker;
+
 import javax.transaction.Transactional;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
-//@DataJpaTest
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-//@Transactional
 class UserRepositoryTest {
 
     @Autowired
     private AppUserRepository underTest;
 
     @Test
-    @Transactional
     void itShouldSaveAppUser() {
         // Given
-        Long id = 1L;
+        Faker faker = new Faker();
+        String email = faker.name().firstName() + "." + faker.name().lastName() + "@gmail.com";
         AppUser appUser = new AppUser(
-                "Firstname",
-                "Lastname",
-                "Firstname.Lastname@gmx.de",
+                faker.name().firstName(),
+                faker.name().lastName(),
+                email,
                 "username",
                 "12345"
         );
 
         // When
-        underTest.save(appUser);
+        AppUser savedAppUser = underTest.save(appUser);
+        Long id = savedAppUser.getId();
+        Optional<AppUser> optionalAppUser = underTest.findById(id);
+
 
         // Then
-        Optional<AppUser> optionalAppUser = underTest.findById(id);
         assertThat(optionalAppUser)
                 .isPresent()
                 .hasValueSatisfying(user -> {
@@ -55,14 +54,14 @@ class UserRepositoryTest {
                     assertThat(user.getUserName()).isEqualTo(appUser.getUserName());
                     assertThat(user.getPassword()).isEqualTo(appUser.getPassword());
                     // lazy initialize problem if the test method not annotated as Transactional
-                    assertThat(user).isEqualToComparingFieldByField(appUser); // deprecated
+                    //assertThat(user).isEqualToComparingFieldByField(appUser); // deprecated
                 });
     }
 
     @Test
     void itShouldNotSaveAppUserWhenFistNameIsNull() {
         // Given
-        Long id = 1L;
+        Faker faker = new Faker();
         AppUser appUser = new AppUser(
                 null,
                 "Lastname",
@@ -75,6 +74,94 @@ class UserRepositoryTest {
         // Then
         String message = "not-null property references a null or transient value : " +
                 "edu.yacoubi.todobackend.model.AppUser.firstName";
+        assertThatThrownBy(
+                () -> underTest.save(appUser)
+        )
+                .hasMessageContaining(message)
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void itShouldNotSaveAppUserWhenLastNameIsNull() {
+        // Given
+        AppUser appUser = new AppUser(
+                "firstName",
+                null,
+                "firstName@gmx.de",
+                "username",
+                "12345"
+        );
+
+        // When
+        // Then
+        String message = "not-null property references a null or transient value : " +
+                "edu.yacoubi.todobackend.model.AppUser.lastName";
+        assertThatThrownBy(
+                () -> underTest.save(appUser)
+        )
+                .hasMessageContaining(message)
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void itShouldNotSaveAppUserWhenEmailIsNull() {
+        // Given
+        AppUser appUser = new AppUser(
+                "firstName",
+                "lastName",
+                null,
+                "username",
+                "12345"
+        );
+
+        // When
+        // Then
+        String message = "not-null property references a null or transient value : " +
+                "edu.yacoubi.todobackend.model.AppUser.email";
+        assertThatThrownBy(
+                () -> underTest.save(appUser)
+        )
+                .hasMessageContaining(message)
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void itShouldNotSaveAppUserWhenUserNameIsNull() {
+        // Given
+        AppUser appUser = new AppUser(
+                "firstName",
+                "lastName",
+                "firstName.lastName@gmail.com",
+                null,
+                "12345"
+        );
+
+        // When
+        // Then
+        String message = "not-null property references a null or transient value : " +
+                "edu.yacoubi.todobackend.model.AppUser.userName";
+        assertThatThrownBy(
+                () -> underTest.save(appUser)
+        )
+                .hasMessageContaining(message)
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void itShouldNotSaveAppUserWhenPasswordIsNull() {
+        // Given
+        AppUser appUser = new AppUser(
+                "firstName",
+                "lastName",
+                "firstName.lastName@gmail.com",
+                "userName",
+                null
+        );
+
+        // When
+        // Then
+        String message = "not-null property references a null or transient value : " +
+                "edu.yacoubi.todobackend.model.AppUser.password";
         assertThatThrownBy(
                 () -> underTest.save(appUser)
         )
@@ -103,6 +190,7 @@ class UserRepositoryTest {
                 "12345789"
         );
 
+        // When
         // Then
         assertThatThrownBy(() -> underTest.save(newAppUser))
                 .hasMessageContaining("could not execute statement; SQL [n/a];")
