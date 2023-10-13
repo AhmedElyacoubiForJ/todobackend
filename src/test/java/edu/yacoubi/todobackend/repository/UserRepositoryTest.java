@@ -3,6 +3,7 @@ package edu.yacoubi.todobackend.repository;
 import edu.yacoubi.todobackend.model.AppUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -82,29 +83,29 @@ class UserRepositoryTest {
     }
 
     @Test
-    @Transactional
+    //@Transactional
     void itShouldNotSaveAppUserWhenEmailAlreadyExists() {
-//        // Given
-//        String email = "test.test@gmx.de";
-//        AppUser appUserExist = new AppUser(
-//                "Firstname",
-//                "Lastname",
-//                email,
-//                "username",
-//                "12345"
-//        );
-//        underTest.save(appUserExist);
-//        AppUser appUserWithExistingEmail = new AppUser(
-//                "Firstname2",
-//                "Lastname2",
-//                email,
-//                "username2",
-//                "123456"
-//        );
-//
-//        // When
-//        underTest.save(appUserWithExistingEmail);
-//
-//        // Then
+        // Given
+        String email = "underTest.email@gmx.de";
+        AppUser appUserExist = new AppUser(
+                "firstName_1",
+                "lastName_1",
+                email,
+                "userName_1",
+                "12345"
+        );
+        underTest.save(appUserExist);
+        AppUser newAppUser = new AppUser(
+                "firstName_2",
+                "lastName_2",
+                email,
+                "userName_2",
+                "12345789"
+        );
+
+        // Then
+        assertThatThrownBy(() -> underTest.save(newAppUser))
+                .hasMessageContaining("could not execute statement; SQL [n/a];")
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 }
