@@ -5,12 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "Category")
-@Table(name = "categories")
+@Table(name = "category")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,19 +47,19 @@ public class Category {
     private String description;
 
     @OneToMany(mappedBy = "category")
-    private List<ToDo> todos;
+    private List<ToDo> todos = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(
-            name = "user_id",
+            name = "app_user_id",
             nullable = false,
             referencedColumnName = "id",
             // readability
             // to rename a generated random name created by spring data framework
             // so, it's the best practice to have a full control about our application
             foreignKey = @ForeignKey(
-                    name = "user_category_fk"
+                    name = "app_user_category_fk"
             )
     )
-    private User user;
+    private AppUser appUser;
 }

@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
-@Table(name = "todos")
+@Table(name = "todo")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

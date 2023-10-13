@@ -5,33 +5,34 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
-@Entity(name = "User")
+@Entity(name = "AppUser")
 @Table(
-        name = "users",
+        name = "app_user",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "user_email_unique",
+                        name = "app_user_email_unique",
                         columnNames = "email"
                 )
         }
 )
 @Data
 @NoArgsConstructor
-//@AllArgsConstructor
-public class User {
+@AllArgsConstructor
+public class AppUser {
     @Id
     @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
+            name = "app_user_sequence",
+            sequenceName = "app_user_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = SEQUENCE,
-            generator = "user_sequence"
+            generator = "app_user_sequence"
     )
     @Column(
             name = "id",
@@ -75,18 +76,18 @@ public class User {
     private String password;
 
     @OneToMany(
-            mappedBy = "user",
+            mappedBy = "appUser",
             orphanRemoval = true,
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             fetch = FetchType.LAZY
     )
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
-    public User(String firstName,
-                String lastName,
-                String email,
-                String userName,
-                String password) {
+    public AppUser(String firstName,
+                   String lastName,
+                   String email,
+                   String userName,
+                   String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
