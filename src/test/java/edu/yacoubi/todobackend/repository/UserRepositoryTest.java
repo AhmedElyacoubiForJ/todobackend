@@ -210,9 +210,9 @@ class UserRepositoryTest {
                 "username",
                 "12345"
         );
+        AppUser savedAppUser = underTest.save(appUser);
 
         // When
-        AppUser savedAppUser = underTest.save(appUser);
         Optional<AppUser> userByEmailOptional = underTest.findUserByEmail(email);
 
         // Then
