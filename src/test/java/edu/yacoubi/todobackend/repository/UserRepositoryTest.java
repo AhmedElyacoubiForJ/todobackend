@@ -196,4 +196,33 @@ class UserRepositoryTest {
                 .hasMessageContaining("could not execute statement; SQL [n/a];")
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
+
+    @Test
+    void itShouldFindAppUserByEmail() {
+        // Given
+        Faker faker = new Faker();
+        long random = faker.random().nextLong();
+        String email = faker.name().firstName() + "." + faker.name().lastName() + "@gmail.com";
+        AppUser appUser = new AppUser(
+                faker.name().firstName(),
+                faker.name().lastName(),
+                email,
+                "username",
+                "12345"
+        );
+
+        // When
+        AppUser savedAppUser = underTest.save(appUser);
+        Optional<AppUser> userByEmailOptional = underTest.findUserByEmail(email);
+
+        // Then
+        assertThat(userByEmailOptional)
+                .isPresent()
+                .hasValueSatisfying(
+                        user -> {
+                            user.getEmail().equals(email);
+                        }
+                );
+
+    }
 }
