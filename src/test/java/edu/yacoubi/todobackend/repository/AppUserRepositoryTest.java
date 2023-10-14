@@ -231,4 +231,31 @@ class AppUserRepositoryTest {
                 );
 
     }
+
+    @Test
+    void itShouldSelectIfEmailExists() {
+        // Given
+        String dontExistsEmail = new Faker().internet().emailAddress();
+
+        Faker faker = new Faker();
+        String existsEmail = faker.internet().emailAddress();
+        AppUser appUser = new AppUser(
+                faker.name().firstName(),
+                faker.name().lastName(),
+                existsEmail,
+                faker.name().username(),
+                faker.internet().password()
+        );
+        AppUser savedAppUser = underTest.save(appUser);
+
+        // When
+        // Then
+        assertThat(
+                underTest.selectExistsEmail(existsEmail)
+        ).isTrue();
+
+        assertThat(
+                underTest.selectExistsEmail(dontExistsEmail)
+        ).isFalse();
+    }
 }
