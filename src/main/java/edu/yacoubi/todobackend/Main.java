@@ -3,11 +3,13 @@ package edu.yacoubi.todobackend;
 import com.github.javafaker.Faker;
 import edu.yacoubi.todobackend.model.AppUser;
 import edu.yacoubi.todobackend.repository.AppUserRepository;
+import edu.yacoubi.todobackend.service.AppUserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -20,21 +22,15 @@ public class Main {
 
 	@Bean
 	CommandLineRunner commandLineRunner(
-			AppUserRepository appUserRepository) {
+			AppUserService appUserService) {
 
 		return args -> {
 			//
 			AppUser newAppUser = generateAppUser();
-			appUserRepository.save(newAppUser);
+			appUserService.save(newAppUser);
 
-			Optional<AppUser> userByEmail = appUserRepository.findUserByEmail(newAppUser.getEmail());
-
-			userByEmail.ifPresent(user -> {
-				System.out.println(user.getId());
-				System.out.println(user.getFirstName());
-				System.out.println(user.getLastName());
-				System.out.println(user.getEmail());
-			});
+			AppUser userByEmail = appUserService.findAppUserByEmail(newAppUser.getEmail());
+			System.out.println(userByEmail);
 
 		};
 	}
@@ -43,14 +39,17 @@ public class Main {
 		Faker faker = new Faker();
 		String firstName = faker.name().firstName();
 		String lastName = faker.name().lastName();
-		String email = String.format("%s.%s@yacoubi.edu", firstName, lastName);
+		//String email = String.format("%s.%s@yacoubi.edu", firstName, lastName);
+		String email = faker.internet().emailAddress();
+		String username = faker.name().username();
+		String password = faker.internet().password();
 
 		AppUser appUser = new AppUser(
 				firstName,
 				lastName,
 				email,
-				"asasas",
-				"wewe"
+				username,
+				password
 		);
 		return appUser;
 	}

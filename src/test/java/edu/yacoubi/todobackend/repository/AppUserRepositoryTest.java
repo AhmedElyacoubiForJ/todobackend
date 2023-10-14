@@ -1,7 +1,6 @@
 package edu.yacoubi.todobackend.repository;
 
 import edu.yacoubi.todobackend.model.AppUser;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +18,22 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class UserRepositoryTest {
+class AppUserRepositoryTest {
 
     @Autowired
     private AppUserRepository underTest;
 
     @Test
+    @Transactional
     void itShouldSaveAppUser() {
         // Given
         Faker faker = new Faker();
-        String email = faker.name().firstName() + "." + faker.name().lastName() + "@gmail.com";
         AppUser appUser = new AppUser(
                 faker.name().firstName(),
                 faker.name().lastName(),
-                email,
-                "username",
-                "12345"
+                faker.internet().emailAddress(),
+                faker.name().username(),
+                faker.internet().password()
         );
 
         // When
@@ -54,7 +53,7 @@ class UserRepositoryTest {
                     assertThat(user.getUserName()).isEqualTo(appUser.getUserName());
                     assertThat(user.getPassword()).isEqualTo(appUser.getPassword());
                     // lazy initialize problem if the test method not annotated as Transactional
-                    //assertThat(user).isEqualToComparingFieldByField(appUser); // deprecated
+                    assertThat(user).isEqualToComparingFieldByField(appUser); // deprecated
                 });
     }
 
@@ -64,10 +63,10 @@ class UserRepositoryTest {
         Faker faker = new Faker();
         AppUser appUser = new AppUser(
                 null,
-                "Lastname",
-                "Lastname@gmx.de",
-                "username",
-                "12345"
+                faker.name().lastName(),
+                faker.internet().emailAddress(),
+                faker.name().username(),
+                faker.internet().password()
         );
 
         // When
@@ -84,12 +83,13 @@ class UserRepositoryTest {
     @Test
     void itShouldNotSaveAppUserWhenLastNameIsNull() {
         // Given
+        Faker faker = new Faker();
         AppUser appUser = new AppUser(
-                "firstName",
+                faker.name().firstName(),
                 null,
-                "firstName@gmx.de",
-                "username",
-                "12345"
+                faker.internet().emailAddress(),
+                faker.name().username(),
+                faker.internet().password()
         );
 
         // When
@@ -106,12 +106,13 @@ class UserRepositoryTest {
     @Test
     void itShouldNotSaveAppUserWhenEmailIsNull() {
         // Given
+        Faker faker = new Faker();
         AppUser appUser = new AppUser(
-                "firstName",
-                "lastName",
+                faker.name().firstName(),
+                faker.name().lastName(),
                 null,
-                "username",
-                "12345"
+                faker.name().username(),
+                faker.internet().password()
         );
 
         // When
@@ -128,12 +129,13 @@ class UserRepositoryTest {
     @Test
     void itShouldNotSaveAppUserWhenUserNameIsNull() {
         // Given
+        Faker faker = new Faker();
         AppUser appUser = new AppUser(
-                "firstName",
-                "lastName",
-                "firstName.lastName@gmail.com",
+                faker.name().firstName(),
+                faker.name().lastName(),
+                faker.internet().emailAddress(),
                 null,
-                "12345"
+                faker.internet().password()
         );
 
         // When
@@ -150,11 +152,12 @@ class UserRepositoryTest {
     @Test
     void itShouldNotSaveAppUserWhenPasswordIsNull() {
         // Given
+        Faker faker = new Faker();
         AppUser appUser = new AppUser(
-                "firstName",
-                "lastName",
-                "firstName.lastName@gmail.com",
-                "userName",
+                faker.name().firstName(),
+                faker.name().lastName(),
+                faker.internet().emailAddress(),
+                faker.name().username(),
                 null
         );
 
@@ -170,29 +173,33 @@ class UserRepositoryTest {
     }
 
     @Test
-    //@Transactional
     void itShouldNotSaveAppUserWhenEmailAlreadyExists() {
         // Given
-        String email = "underTest.email@gmx.de";
+        Faker faker = new Faker();
+        String underTestUniqueEmail = faker.internet().emailAddress();
         AppUser appUserExist = new AppUser(
-                "firstName_1",
-                "lastName_1",
-                email,
-                "userName_1",
-                "12345"
+                faker.name().firstName(),
+                faker.name().lastName(),
+                underTestUniqueEmail,
+                faker.name().username(),
+                faker.internet().password()
         );
         underTest.save(appUserExist);
+
+        faker = new Faker();
         AppUser newAppUser = new AppUser(
-                "firstName_2",
-                "lastName_2",
-                email,
-                "userName_2",
-                "12345789"
+                faker.name().firstName(),
+                faker.name().lastName(),
+                underTestUniqueEmail,
+                faker.name().username(),
+                faker.internet().password()
         );
 
         // When
         // Then
-        assertThatThrownBy(() -> underTest.save(newAppUser))
+        assertThatThrownBy(
+                () -> underTest.save(newAppUser)
+        )
                 .hasMessageContaining("could not execute statement; SQL [n/a];")
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
@@ -201,19 +208,18 @@ class UserRepositoryTest {
     void itShouldFindAppUserByEmail() {
         // Given
         Faker faker = new Faker();
-        long random = faker.random().nextLong();
-        String email = faker.name().firstName() + "." + faker.name().lastName() + "@gmail.com";
+        String email = faker.internet().emailAddress();
         AppUser appUser = new AppUser(
                 faker.name().firstName(),
                 faker.name().lastName(),
                 email,
-                "username",
-                "12345"
+                faker.name().username(),
+                faker.internet().password()
         );
         AppUser savedAppUser = underTest.save(appUser);
 
         // When
-        Optional<AppUser> userByEmailOptional = underTest.findUserByEmail(email);
+        Optional<AppUser> userByEmailOptional = underTest.findAppUserByEmail(email);
 
         // Then
         assertThat(userByEmailOptional)

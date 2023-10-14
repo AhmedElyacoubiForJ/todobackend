@@ -1,13 +1,14 @@
 package edu.yacoubi.todobackend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.Access.*;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "AppUser")
@@ -20,9 +21,11 @@ import static javax.persistence.GenerationType.SEQUENCE;
                 )
         }
 )
-@Data
+//@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class AppUser {
     @Id
     @SequenceGenerator(
@@ -81,6 +84,7 @@ public class AppUser {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             fetch = FetchType.LAZY
     )
+    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Category> categories = new ArrayList<>();
 
     public AppUser(String firstName,
@@ -93,5 +97,17 @@ public class AppUser {
         this.email = email;
         this.userName = userName;
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
