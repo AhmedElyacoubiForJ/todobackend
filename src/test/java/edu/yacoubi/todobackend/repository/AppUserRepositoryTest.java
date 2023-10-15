@@ -1,6 +1,9 @@
 package edu.yacoubi.todobackend.repository;
 
 import edu.yacoubi.todobackend.model.AppUser;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +20,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
+@SpringBootTest()
 class AppUserRepositoryTest {
 
     @Autowired
     private AppUserRepository underTest;
+
+    @AfterAll
+    static void afterAll() {}
+
+    @BeforeEach
+    void setUp() {}
+
+    @AfterEach
+    void tearDown() {}
 
     @Test
     @Transactional
@@ -250,12 +262,44 @@ class AppUserRepositoryTest {
 
         // When
         // Then
+        Boolean expected = underTest.selectExistsEmail(existsEmail);
         assertThat(
-                underTest.selectExistsEmail(existsEmail)
+                expected
         ).isTrue();
 
+        Boolean dontExpected = underTest.selectExistsEmail(dontExistsEmail);
         assertThat(
-                underTest.selectExistsEmail(dontExistsEmail)
+                dontExpected
         ).isFalse();
+    }
+
+    @Test
+    void itShouldFindAppUserByEmailAndPassword() {
+        // Given
+        Faker faker = new Faker();
+
+        String email = faker.internet().emailAddress();
+        String password = faker.internet().password();
+
+        AppUser appUser = new AppUser(
+                faker.name().firstName(),
+                faker.name().lastName(),
+                email,
+                faker.name().username(),
+                password
+        );
+        AppUser savedAppUser = underTest.save(appUser);
+
+        // When
+        // Then
+        Optional<AppUser> userByEmailAndPasswordOptional =
+                underTest.findAppUserByEmailAndPassword(email, password);
+        assertThat(userByEmailAndPasswordOptional).isPresent().hasValueSatisfying(
+                user -> {
+                    user.getId().equals(savedAppUser.getId());
+                    user.getEmail().equals(email);
+                    user.getPassword().equals(password);
+                }
+        );
     }
 }

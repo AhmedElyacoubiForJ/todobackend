@@ -18,4 +18,6 @@ public interface AppUserRepository
             "FROM AppUser appUser " +
             "WHERE appUser.email = ?1")
     Boolean selectExistsEmail(String email);
+
+    Optional<AppUser> findAppUserByEmailAndPassword(String email, String password);
 }
