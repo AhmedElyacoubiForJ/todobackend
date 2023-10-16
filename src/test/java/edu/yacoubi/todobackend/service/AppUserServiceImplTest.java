@@ -14,11 +14,9 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AppUserServiceImplTest {
@@ -38,22 +36,28 @@ class AppUserServiceImplTest {
     @Test
     public void itShouldFindAppUserById() {
         // Given
-        Long id = 1L;
         Faker faker = new Faker();
-        AppUser appUser = new AppUser(
+        AppUser expectedAppUser = new AppUser(
                 faker.name().firstName(),
                 faker.name().lastName(),
                 faker.internet().emailAddress(),
                 faker.name().username(),
                 faker.internet().password()
         );
-        appUser.setId(id);
 
         // When
-        when(appUserRepository.findById(id)).thenReturn(Optional.of(appUser));
+        when(appUserRepository.findById(anyLong()))
+                .thenReturn(Optional.of(expectedAppUser));
 
         // Then
-        assertThat(underTest.findById(id)).isEqualTo(appUser);
+        assertThat(underTest.findById(anyLong()))
+                .usingRecursiveComparison()
+                .isEqualTo(expectedAppUser);
+
+        verify(appUserRepository, times(1))
+                .findById(anyLong());
+
+        verifyNoMoreInteractions(appUserRepository);
     }
 
     @Test
