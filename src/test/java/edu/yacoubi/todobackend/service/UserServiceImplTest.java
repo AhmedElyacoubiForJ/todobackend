@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import edu.yacoubi.todobackend.EntityNotFoundException;
 import edu.yacoubi.todobackend.model.AppUser;
 import edu.yacoubi.todobackend.repository.UserRepository;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,19 +35,62 @@ class UserServiceImplTest {
     @Captor
     private ArgumentCaptor<String> emailArgumentCaptor;
 
+    @Captor
+    private ArgumentCaptor<AppUser> appUserArgumentCaptor;
+
     @BeforeEach
     void setUp() {
         underTest = new UserServiceImpl(userRepository);
     }
 
     @Test
-    public void itShouldSaveAppUserIf_AppUser_IsNull() {
+    public void itShouldNotSaveAppUserIf_AppUser_IsNull() {
+        // Given
 
+        // When
+        // Then
+        assertThatThrownBy(
+                () -> underTest.save(null)
+        ).isInstanceOf(IllegalArgumentException.class);
+
+        verify(
+                userRepository,
+                times(0)
+        ).save(any());
     }
 
     @Test
     public void itShouldSaveAppUser() {
+        // Given
+        Faker faker = new Faker();
+        var expectedAppUser = new AppUser(
+                faker.name().firstName(),
+                faker.name().lastName(),
+                faker.internet().emailAddress(),
+                faker.name().username(),
+                faker.internet().password()
+        );
 
+        // when
+        // when(userRepository.save(expectedAppUser)).thenReturn(expectedAppUser);
+        underTest.save(expectedAppUser);
+
+        // Then
+        then(userRepository)
+                .should()
+                .save(appUserArgumentCaptor.capture());
+
+        assertThat(appUserArgumentCaptor.getValue())
+                .isEqualTo(expectedAppUser);
+
+//        assertThat(expectedAppUser)
+//                .usingRecursiveComparison()
+//                .isEqualTo(expectedAppUser);
+
+        verify(
+                userRepository,
+                times(1)
+        ).save(expectedAppUser);
     }
 
     @Test
@@ -242,14 +286,13 @@ class UserServiceImplTest {
     @Test
     public void itShouldThrownWhenFindAppUserByIdIsNull() {
         // Given
-        Long id = null;
+        // Long id = null;
 
         // When
         // Then
         assertThatThrownBy(
-                () -> underTest.findById(id)
-        )
-                .isInstanceOf(IllegalArgumentException.class);
+                () -> underTest.findById(null)
+        ).isInstanceOf(IllegalArgumentException.class);
 
         verify(
                 userRepository,
