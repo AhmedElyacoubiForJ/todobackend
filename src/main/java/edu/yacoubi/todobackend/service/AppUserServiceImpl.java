@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -59,13 +60,13 @@ public class AppUserServiceImpl implements AppUserService {
             throw new IllegalArgumentException();
         }
         return appUserRepository.findAppUserByEmail(email)
-                .orElseThrow(() -> {
+                .orElseThrow(
+                        () -> {
                             String message = "user with EMAIL :  " + email + " not found";
                             EntityNotFoundException eNfE =
                                     new EntityNotFoundException(message);
                             log.error("error in getting user with EMAIL :  {}", email, eNfE);
                             return eNfE;
-                        }
-                );
+                        });
     }
 }
