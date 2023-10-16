@@ -2,41 +2,47 @@ package edu.yacoubi.todobackend.service;
 
 import edu.yacoubi.todobackend.EntityNotFoundException;
 import edu.yacoubi.todobackend.model.AppUser;
-import edu.yacoubi.todobackend.repository.AppUserRepository;
+import edu.yacoubi.todobackend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 @Slf4j
-public class AppUserServiceImpl implements AppUserService {
+public class UserServiceImpl implements UserService {
 
-    private final AppUserRepository appUserRepository;
+    private final UserRepository userRepository;
 
     @Override
     public AppUser save(AppUser appUser) {
-        return appUserRepository.save(appUser);
+        log.info("UserServiceImpl save...");
+
+        if (appUser == null) {
+            log.error("user is null");
+            throw new IllegalArgumentException();
+        }
+
+        return userRepository.save(appUser);
     }
 
     @Override
     public List<AppUser> findAll() {
-        return appUserRepository.findAll();
+        return userRepository.findAll();
     }
 
     @Override
     public AppUser findById(Long id) {
-        log.info("call findById...");
+        log.info("UserServiceImpl findById...");
 
         if (id == null) {
             log.error("id is null");
             throw new IllegalArgumentException();
         }
 
-        return appUserRepository.findById(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> {
                     String message = "user with ID :  " + id + " not found";
                     EntityNotFoundException eNfE =
@@ -49,17 +55,24 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public void delete(Long id) {
+        log.info("UserServiceImpl delete...");
+
+        if (id == null) {
+            log.error("id is null");
+            throw new IllegalArgumentException();
+        }
+        userRepository.deleteById(id);
     }
 
     @Override
     public AppUser findAppUserByEmail(String email) {
-        log.info("call findAppUserByEmail...");
+        log.info("UserServiceImpl findAppUserByEmail...");
 
         if (email == null) {
             log.error("email is null");
             throw new IllegalArgumentException();
         }
-        return appUserRepository.findAppUserByEmail(email)
+        return userRepository.findAppUserByEmail(email)
                 .orElseThrow(
                         () -> {
                             String message = "user with EMAIL :  " + email + " not found";

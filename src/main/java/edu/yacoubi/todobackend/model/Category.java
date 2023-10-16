@@ -47,7 +47,7 @@ public class Category {
     private String description;
 
     @OneToMany(mappedBy = "category")
-    private List<ToDo> todos = new ArrayList<>();
+    private List<Todo> todos = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(

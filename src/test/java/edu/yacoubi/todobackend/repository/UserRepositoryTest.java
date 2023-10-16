@@ -21,10 +21,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest()
-class AppUserRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
-    private AppUserRepository underTest;
+    private UserRepository underTest;
 
     @AfterAll
     static void afterAll() {}

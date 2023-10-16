@@ -9,12 +9,12 @@ import java.time.ZonedDateTime;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
-@Entity
+@Entity(name = "Todo")
 @Table(name = "todo")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ToDo {
+public class Todo {
     @Id
     @SequenceGenerator(
             name = "todo_sequence",
