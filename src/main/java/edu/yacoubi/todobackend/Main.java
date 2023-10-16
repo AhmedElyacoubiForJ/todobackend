@@ -3,6 +3,7 @@ package edu.yacoubi.todobackend;
 import com.github.javafaker.Faker;
 import edu.yacoubi.todobackend.model.AppUser;
 import edu.yacoubi.todobackend.service.AppUserService;
+import edu.yacoubi.todobackend.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,9 +18,10 @@ public class Main {
 		SpringApplication.run(Main.class, args);
 	}
 
-	//@Bean
+	@Bean
 	CommandLineRunner commandLineRunner(
-			AppUserService appUserService) {
+			AppUserService appUserService,
+			CategoryService categoryService) {
 
 		return args -> {
 			//

@@ -1,23 +1,32 @@
 package edu.yacoubi.todobackend.service;
 
 import edu.yacoubi.todobackend.model.Category;
+import edu.yacoubi.todobackend.repository.CategoryRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
+@Service
+@AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
+
+    private final CategoryRepository categoryRepository;
+
     @Override
     public void save(Category category) {
-
+        categoryRepository.save(category);
     }
 
     @Override
     public List<Category> findAll() {
-        return null;
+        return categoryRepository.findAll();
     }
 
     @Override
-    public Category findById(Long id) {
-        return null;
+    public Optional<Category> findById(Long id) {
+        return categoryRepository.findById(id);
     }
 
     @Override
