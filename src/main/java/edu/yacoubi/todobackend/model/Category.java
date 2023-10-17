@@ -1,8 +1,6 @@
 package edu.yacoubi.todobackend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,9 +10,11 @@ import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "Category")
 @Table(name = "category")
-@Data
+//@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 public class Category {
     @Id
     @SequenceGenerator(
@@ -62,4 +62,10 @@ public class Category {
             )
     )
     private AppUser appUser;
+
+    public Category(String name, String description, AppUser appUser) {
+        this.name = name;
+        this.description = description;
+        this.appUser = appUser;
+    }
 }

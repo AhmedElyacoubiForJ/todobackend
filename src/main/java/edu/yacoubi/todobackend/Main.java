@@ -1,7 +1,10 @@
 package edu.yacoubi.todobackend;
 
 import com.github.javafaker.Faker;
+import edu.yacoubi.todobackend.exception.InvalidArgumentException;
 import edu.yacoubi.todobackend.model.AppUser;
+import edu.yacoubi.todobackend.model.Category;
+import edu.yacoubi.todobackend.service.TodoService;
 import edu.yacoubi.todobackend.service.UserService;
 import edu.yacoubi.todobackend.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,18 +24,30 @@ public class Main {
 	@Bean
 	CommandLineRunner commandLineRunner(
 			UserService userService,
-			CategoryService categoryService) {
+			CategoryService categoryService,
+			TodoService todoService) {
 
 		return args -> {
 			//
 			log.info("commandLineRunner start call...");
 			AppUser newAppUser = generateAppUser();
-			userService.save(newAppUser);
+			// create user
+			AppUser userOne = userService.save(newAppUser);
 
-			AppUser userByEmail = userService.findAppUserByEmail(newAppUser.getEmail());
-			System.out.println(userByEmail);
+			// create category
+			Category category = new Category("sport", "FitX", userOne);
+			Category categoryOne = categoryService.save(category);
+
+			// create some todos & connect them to category
+
+			System.out.println();
+
+
+//				AppUser userByEmail = userService.findAppUserByEmail(newAppUser.getEmail());
+//				System.out.println(userByEmail);
+
+
 			log.info("commandLineRunner end call...");
-
 		};
 	}
 
