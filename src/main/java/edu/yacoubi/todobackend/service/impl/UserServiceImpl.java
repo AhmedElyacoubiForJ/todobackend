@@ -2,6 +2,7 @@ package edu.yacoubi.todobackend.service.impl;
 
 import edu.yacoubi.todobackend.exception.EntityNotFoundException;
 import edu.yacoubi.todobackend.exception.InvalidArgumentException;
+import edu.yacoubi.todobackend.exception.UserServiceBusinessException;
 import edu.yacoubi.todobackend.model.AppUser;
 import edu.yacoubi.todobackend.repository.UserRepository;
 import edu.yacoubi.todobackend.service.UserService;
@@ -20,14 +21,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AppUser save(AppUser appUser) {
-        log.info("UserServiceImpl save...");
+        log.info("UserServiceImpl:save execution started.");
 
         if (appUser == null) {
-            log.error("user is null");
+            log.error("Exception occurred while validating parameter, appUser is null");
             throw new InvalidArgumentException("AppUser must not be null");
         }
 
-        return userRepository.save(appUser);
+        AppUser userResult;
+        try {
+            log.debug("UserServiceImpl:save request parameters {}", appUser);
+            userResult = userRepository.save(appUser);
+            log.debug("UserServiceImpl:save result parameters {}", userResult);
+        } catch (Exception ex) {
+            log.error("Exception occurred while persisting appUser to database, Exception message {}", ex.getMessage());
+            throw new UserServiceBusinessException("Exception occurred while save a new appUser");
+        }
+
+        log.info("UserServiceImpl:save execution end.");
+        return userResult;
     }
 
     @Override
@@ -68,7 +80,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AppUser findAppUserByEmail(String email) {
-        log.info("UserServiceImpl findAppUserByEmail...");
+        // TODO to improve
+        log.info("UserServiceImpl:findAppUserByEmail execution started.");
 
         if (email == null) {
             log.error("email is null");
@@ -80,7 +93,10 @@ public class UserServiceImpl implements UserService {
             throw new InvalidArgumentException("email must not be empty");
         }
 
-        return userRepository.findAppUserByEmail(email)
+        log.debug("ProductService:createNewProduct request parameters {}", email);
+
+
+        AppUser appUserResponse = userRepository.findAppUserByEmail(email)
                 .orElseThrow(
                         () -> {
                             String message = "user with EMAIL :  " + email + " not found";
@@ -89,5 +105,7 @@ public class UserServiceImpl implements UserService {
                             log.error("error in getting user with EMAIL :  {}", email, eNfE);
                             return eNfE;
                         });
+        log.info("UserServiceImpl:findAppUserByEmail execution ended.");
+        return appUserResponse;
     }
 }

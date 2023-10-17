@@ -29,14 +29,15 @@ public class Main {
 
 		return args -> {
 			//
-			log.info("commandLineRunner start call...");
+			log.info("Main:commandLineRunner execution started.");
+
 			AppUser newAppUser = generateAppUser();
 			// create user
 			AppUser userOne = userService.save(newAppUser);
 
 			// create category
-			Category category = new Category("sport", "FitX", userOne);
-			Category categoryOne = categoryService.save(category);
+			//Category category = new Category("sport", "FitX", userOne);
+			//Category categoryOne = categoryService.save(category);
 
 			// create some todos & connect them to category
 
@@ -47,7 +48,7 @@ public class Main {
 //				System.out.println(userByEmail);
 
 
-			log.info("commandLineRunner end call...");
+			log.info("Main:commandLineRunner execution end.");
 		};
 	}
 

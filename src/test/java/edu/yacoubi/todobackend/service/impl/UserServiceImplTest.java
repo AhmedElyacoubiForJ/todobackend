@@ -62,6 +62,7 @@ class UserServiceImplTest {
 
     @Test
     public void itShouldSaveAppUser() {
+        // TODO to improve
         // Given
         Faker faker = new Faker();
         var expectedAppUser = new AppUser(
