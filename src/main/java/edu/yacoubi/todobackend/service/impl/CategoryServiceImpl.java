@@ -1,15 +1,19 @@
-package edu.yacoubi.todobackend.service;
+package edu.yacoubi.todobackend.service.impl;
 
 import edu.yacoubi.todobackend.model.Category;
 import edu.yacoubi.todobackend.repository.CategoryRepository;
+import edu.yacoubi.todobackend.service.CategoryService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;

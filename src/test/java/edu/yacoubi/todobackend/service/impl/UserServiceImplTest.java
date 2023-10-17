@@ -1,10 +1,10 @@
-package edu.yacoubi.todobackend.service;
+package edu.yacoubi.todobackend.service.impl;
 
 import com.github.javafaker.Faker;
-import edu.yacoubi.todobackend.EntityNotFoundException;
+import edu.yacoubi.todobackend.exception.EntityNotFoundException;
+import edu.yacoubi.todobackend.exception.InvalidArgumentException;
 import edu.yacoubi.todobackend.model.AppUser;
 import edu.yacoubi.todobackend.repository.UserRepository;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,7 +51,8 @@ class UserServiceImplTest {
         // Then
         assertThatThrownBy(
                 () -> underTest.save(null)
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(InvalidArgumentException.class)
+                .hasMessageContaining("AppUser must not be null");
 
         verify(
                 userRepository,
@@ -125,7 +126,8 @@ class UserServiceImplTest {
         // Then
         assertThatThrownBy(
                 () -> underTest.findById(id)
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(InvalidArgumentException.class)
+                .hasMessageContaining("id must not be null");
                 //.hasMessageContaining("argument cannot be null");
 
         verify(userRepository, times(0))
@@ -219,14 +221,15 @@ class UserServiceImplTest {
     @Test
     public void itShouldThrownWhenFindAppUserByEmailIsNull() {
         // Given
-        String email = null;
+        //String email = null;
 
         // When
         // Then
         assertThatThrownBy(
-                () -> underTest.findAppUserByEmail(email)
+                () -> underTest.findAppUserByEmail(null)
         )
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(InvalidArgumentException.class)
+                .hasMessageContaining("email must not be null");
 
         verify(userRepository, times(0))
                 .findAppUserByEmail(anyString());
@@ -292,14 +295,14 @@ class UserServiceImplTest {
         // Then
         assertThatThrownBy(
                 () -> underTest.findById(null)
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(InvalidArgumentException.class)
+                .hasMessageContaining("id must not be null");
 
         verify(
                 userRepository,
-                times(0) // will be not called
+                times(0) // will not be called
         ).findById(any());
 
         //then(appUserRepository).should(never()).findById(any());
     }
-
 }

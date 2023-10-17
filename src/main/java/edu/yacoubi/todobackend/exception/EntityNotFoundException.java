@@ -1,4 +1,4 @@
-package edu.yacoubi.todobackend;
+package edu.yacoubi.todobackend.exception;
 
 public class EntityNotFoundException extends RuntimeException {
 

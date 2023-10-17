@@ -1,16 +1,18 @@
-package edu.yacoubi.todobackend.service;
+package edu.yacoubi.todobackend.service.impl;
 
-import edu.yacoubi.todobackend.EntityNotFoundException;
+import edu.yacoubi.todobackend.exception.EntityNotFoundException;
+import edu.yacoubi.todobackend.exception.InvalidArgumentException;
 import edu.yacoubi.todobackend.model.AppUser;
 import edu.yacoubi.todobackend.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import edu.yacoubi.todobackend.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
 
@@ -22,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
         if (appUser == null) {
             log.error("user is null");
-            throw new IllegalArgumentException();
+            throw new InvalidArgumentException("AppUser must not be null");
         }
 
         return userRepository.save(appUser);
@@ -39,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
         if (id == null) {
             log.error("id is null");
-            throw new IllegalArgumentException();
+            throw new InvalidArgumentException("user id must not be null");
         }
 
         return userRepository.findById(id)
@@ -59,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
         if (id == null) {
             log.error("id is null");
-            throw new IllegalArgumentException();
+            throw new InvalidArgumentException("id must not be null");
         }
         userRepository.deleteById(id);
     }
@@ -70,8 +72,14 @@ public class UserServiceImpl implements UserService {
 
         if (email == null) {
             log.error("email is null");
-            throw new IllegalArgumentException();
+            throw new InvalidArgumentException("email must not be null");
         }
+
+        if (email.isEmpty()) {
+            log.error("email is empty");
+            throw new InvalidArgumentException("email must not be empty");
+        }
+
         return userRepository.findAppUserByEmail(email)
                 .orElseThrow(
                         () -> {

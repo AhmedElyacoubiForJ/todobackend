@@ -1,10 +1,21 @@
-package edu.yacoubi.todobackend.service;
+package edu.yacoubi.todobackend.service.impl;
 
 import edu.yacoubi.todobackend.model.Todo;
+import edu.yacoubi.todobackend.repository.TodoRepository;
+import edu.yacoubi.todobackend.service.TodoService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
+@Slf4j
 public class TodoServiceImpl implements TodoService {
+
+    private final TodoRepository todoRepository;
+
     @Override
     public void save(Todo todo) {
 
