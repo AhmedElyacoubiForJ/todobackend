@@ -1,6 +1,6 @@
 package edu.yacoubi.todobackend.service.delegate;
 
-import edu.yacoubi.todobackend.service.decktop.UserService;
+import edu.yacoubi.todobackend.service.decktop.CategoryService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Getter
-public class UserServiceDelegate {
-    private final UserService userService;
-
+public class CategoryServiceDelegate {
+    private final CategoryService categoryService;
 }

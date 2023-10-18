@@ -1,8 +1,11 @@
 package edu.yacoubi.todobackend;
 
 import com.github.javafaker.Faker;
+import edu.yacoubi.todobackend.dto.CategoryDTO;
 import edu.yacoubi.todobackend.dto.UserDTO;
 import edu.yacoubi.todobackend.model.AppUser;
+import edu.yacoubi.todobackend.model.Category;
+import edu.yacoubi.todobackend.service.api.CategoryServiceAPI;
 import edu.yacoubi.todobackend.service.decktop.TodoService;
 import edu.yacoubi.todobackend.service.decktop.UserService;
 import edu.yacoubi.todobackend.service.decktop.CategoryService;
@@ -23,26 +26,26 @@ public class Main {
 
 	@Bean
 	CommandLineRunner commandLineRunner(
-			UserService userService,
-			CategoryService categoryService,
-			TodoService todoService,
-			UserServiceAPI userServiceAPI) {
+			UserServiceAPI userServiceAPI,
+			CategoryServiceAPI categoryServiceAPI) {
 
 		return args -> {
 			//
 			log.info("Main:commandLineRunner execution started.");
 
-			AppUser newAppUser = generateAppUser();
+			//AppUser newAppUser = generateAppUser();
 			UserDTO userDTO = generateUserDTO();
 
 
-			// create user
-			// AppUser userOne = userService.createNewUser(newAppUser);
-
 			UserDTO userDTOResult = userServiceAPI.createNewUser(userDTO);
 
-			// create category
-			//Category category = new Category("sport", "FitX", userOne);
+			CategoryDTO categoryDTO = new CategoryDTO(
+					"sport",
+					"FitX",
+					userDTOResult
+			);
+
+
 			//Category categoryOne = categoryService.save(category);
 
 			// create some todos & connect them to category

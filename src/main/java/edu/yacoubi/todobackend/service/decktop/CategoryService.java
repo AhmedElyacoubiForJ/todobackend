@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CategoryService {
-    Category save(Category category);
-    List<Category> findAll();
-    Optional<Category> findById(Long id);
-    List<Category> findAllByUserId(Long userId);
-    void delete(Long id);
+    Category createNewCategory(Category category);
+    List<Category> getCategories();
+    Category getCategoryById(Long id);
+    void deleteCategoryById(Long id);
 }

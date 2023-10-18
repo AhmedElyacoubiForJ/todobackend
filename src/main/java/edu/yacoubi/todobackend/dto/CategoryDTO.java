@@ -31,4 +31,11 @@ public class CategoryDTO {
 
     @NotBlank(message = "user shouldn't be NULL OR EMPTY")
     private UserDTO userDTO;
+
+    public CategoryDTO(String name, String description, UserDTO userDTO) {
+        this.name = name;
+        this.description = description;
+        this.todos = todos;
+        this.userDTO = userDTO;
+    }
 }

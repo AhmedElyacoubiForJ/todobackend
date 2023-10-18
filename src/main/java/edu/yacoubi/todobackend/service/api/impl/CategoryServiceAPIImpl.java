@@ -4,12 +4,14 @@ import edu.yacoubi.todobackend.dto.CategoryDTO;
 import edu.yacoubi.todobackend.repository.CategoryRepository;
 import edu.yacoubi.todobackend.service.api.CategoryServiceAPI;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CategoryServiceAPIImpl implements CategoryServiceAPI {
 
     private final CategoryRepository repository;
