@@ -1,12 +1,12 @@
 package edu.yacoubi.todobackend;
 
 import com.github.javafaker.Faker;
-import edu.yacoubi.todobackend.exception.InvalidArgumentException;
+import edu.yacoubi.todobackend.dto.UserDTO;
 import edu.yacoubi.todobackend.model.AppUser;
-import edu.yacoubi.todobackend.model.Category;
-import edu.yacoubi.todobackend.service.TodoService;
-import edu.yacoubi.todobackend.service.UserService;
-import edu.yacoubi.todobackend.service.CategoryService;
+import edu.yacoubi.todobackend.service.decktop.TodoService;
+import edu.yacoubi.todobackend.service.decktop.UserService;
+import edu.yacoubi.todobackend.service.decktop.CategoryService;
+import edu.yacoubi.todobackend.service.api.UserServiceAPI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -25,15 +25,21 @@ public class Main {
 	CommandLineRunner commandLineRunner(
 			UserService userService,
 			CategoryService categoryService,
-			TodoService todoService) {
+			TodoService todoService,
+			UserServiceAPI userServiceAPI) {
 
 		return args -> {
 			//
 			log.info("Main:commandLineRunner execution started.");
 
 			AppUser newAppUser = generateAppUser();
+			UserDTO userDTO = generateUserDTO();
+
+
 			// create user
-			AppUser userOne = userService.save(newAppUser);
+			// AppUser userOne = userService.createNewUser(newAppUser);
+
+			UserDTO userDTOResult = userServiceAPI.createNewUser(userDTO);
 
 			// create category
 			//Category category = new Category("sport", "FitX", userOne);
@@ -44,7 +50,7 @@ public class Main {
 			System.out.println();
 
 
-//				AppUser userByEmail = userService.findAppUserByEmail(newAppUser.getEmail());
+			//	AppUser userByEmail = userService.getUserByEmail(newAppUser.getEmail());
 //				System.out.println(userByEmail);
 
 
@@ -52,10 +58,20 @@ public class Main {
 		};
 	}
 
+	private UserDTO generateUserDTO() {
+		Faker faker = new Faker();
+		UserDTO userDTO = new UserDTO(
+				faker.name().firstName(),
+				faker.name().lastName(),
+				faker.internet().emailAddress(),
+				faker.name().username(),
+				faker.internet().password()
+		);
+		return userDTO;
+	}
+
 	private static AppUser generateAppUser() {
 		Faker faker = new Faker();
-		//String email = String.format("%s.%s@yacoubi.edu", firstName, lastName);
-
 		AppUser appUser = new AppUser(
 				faker.name().firstName(),
 				faker.name().lastName(),

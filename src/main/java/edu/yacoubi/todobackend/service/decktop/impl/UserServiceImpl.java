@@ -1,11 +1,11 @@
-package edu.yacoubi.todobackend.service.impl;
+package edu.yacoubi.todobackend.service.decktop.impl;
 
 import edu.yacoubi.todobackend.exception.EntityNotFoundException;
 import edu.yacoubi.todobackend.exception.InvalidArgumentException;
 import edu.yacoubi.todobackend.exception.UserServiceBusinessException;
 import edu.yacoubi.todobackend.model.AppUser;
 import edu.yacoubi.todobackend.repository.UserRepository;
-import edu.yacoubi.todobackend.service.UserService;
+import edu.yacoubi.todobackend.service.decktop.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,8 +20,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public AppUser save(AppUser appUser) {
-        log.info("UserServiceImpl:save execution started.");
+    public AppUser createNewUser(AppUser appUser) {
+        log.info("UserServiceImpl:createNewUser execution started.");
 
         if (appUser == null) {
             log.error("Exception occurred while validating parameter, appUser is null");
@@ -30,25 +30,28 @@ public class UserServiceImpl implements UserService {
 
         AppUser userResult;
         try {
-            log.debug("UserServiceImpl:save request parameters {}", appUser);
+            log.debug("UserServiceImpl:createNewUser call parameter {}", appUser);
             userResult = userRepository.save(appUser);
-            log.debug("UserServiceImpl:save result parameters {}", userResult);
+            log.debug("UserServiceImpl:createNewUser entity result {}", userResult);
         } catch (Exception ex) {
-            log.error("Exception occurred while persisting appUser to database, Exception message {}", ex.getMessage());
+            log.error(
+                    "Exception occurred while persisting appUser to database, Exception message {}",
+                    ex.getMessage()
+            );
             throw new UserServiceBusinessException("Exception occurred while save a new appUser");
         }
 
-        log.info("UserServiceImpl:save execution end.");
+        log.info("UserServiceImpl:createNewUser execution end.");
         return userResult;
     }
 
     @Override
-    public List<AppUser> findAll() {
+    public List<AppUser> getUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public AppUser findById(Long id) {
+    public AppUser getUserById(Long id) {
         log.info("UserServiceImpl findById...");
 
         if (id == null) {
@@ -68,7 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteUserById(Long id) {
         log.info("UserServiceImpl delete...");
 
         if (id == null) {
@@ -79,7 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AppUser findAppUserByEmail(String email) {
+    public AppUser getUserByEmail(String email) {
         // TODO to improve
         log.info("UserServiceImpl:findAppUserByEmail execution started.");
 

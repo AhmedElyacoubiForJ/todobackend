@@ -5,6 +5,7 @@ import edu.yacoubi.todobackend.exception.EntityNotFoundException;
 import edu.yacoubi.todobackend.exception.InvalidArgumentException;
 import edu.yacoubi.todobackend.model.AppUser;
 import edu.yacoubi.todobackend.repository.UserRepository;
+import edu.yacoubi.todobackend.service.decktop.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,7 +51,7 @@ class UserServiceImplTest {
         // When
         // Then
         assertThatThrownBy(
-                () -> underTest.save(null)
+                () -> underTest.createNewUser(null)
         ).isInstanceOf(InvalidArgumentException.class)
                 .hasMessageContaining("AppUser must not be null");
 
@@ -75,7 +76,7 @@ class UserServiceImplTest {
 
         // when
         // when(userRepository.save(expectedAppUser)).thenReturn(expectedAppUser);
-        underTest.save(expectedAppUser);
+        underTest.createNewUser(expectedAppUser);
 
         // Then
         then(userRepository)
@@ -108,7 +109,7 @@ class UserServiceImplTest {
                 );
 
         // Act & Assert
-        assertThat(underTest.findAll()).hasSize(3);
+        assertThat(underTest.getUsers()).hasSize(3);
 
         verify(
                 userRepository,
@@ -126,7 +127,7 @@ class UserServiceImplTest {
         // When
         // Then
         assertThatThrownBy(
-                () -> underTest.findById(id)
+                () -> underTest.getUserById(id)
         ).isInstanceOf(InvalidArgumentException.class)
                 .hasMessageContaining("id must not be null");
                 //.hasMessageContaining("argument cannot be null");
@@ -139,7 +140,7 @@ class UserServiceImplTest {
     public void itShouldDeleteUserById() {
         // When
         doNothing().when(userRepository).deleteById(anyLong());
-        underTest.delete(anyLong());
+        underTest.deleteUserById(anyLong());
 
         // Then
         verify(
@@ -165,7 +166,7 @@ class UserServiceImplTest {
         // When
         when(userRepository.findAppUserByEmail(email))
                 .thenReturn(Optional.of(expectedAppUser));
-        var actualAppUser = underTest.findAppUserByEmail(email);
+        var actualAppUser = underTest.getUserByEmail(email);
 
         // Then
         then(userRepository)
@@ -198,7 +199,7 @@ class UserServiceImplTest {
 
         // Then
         assertThatThrownBy(
-                () -> underTest.findAppUserByEmail(email)
+                () -> underTest.getUserByEmail(email)
         )
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("user with EMAIL :  " + email + " not found");
@@ -227,7 +228,7 @@ class UserServiceImplTest {
         // When
         // Then
         assertThatThrownBy(
-                () -> underTest.findAppUserByEmail(null)
+                () -> underTest.getUserByEmail(null)
         )
                 .isInstanceOf(InvalidArgumentException.class)
                 .hasMessageContaining("email must not be null");
@@ -254,7 +255,7 @@ class UserServiceImplTest {
                 .thenReturn(Optional.of(expectedAppUser));
 
         // Then
-        assertThat(underTest.findById(anyLong()))
+        assertThat(underTest.getUserById(anyLong()))
                 .usingRecursiveComparison()
                 .isEqualTo(expectedAppUser);
 
@@ -276,7 +277,7 @@ class UserServiceImplTest {
 
         // Then
         assertThatThrownBy(
-                () -> underTest.findById(id)
+                () -> underTest.getUserById(id)
         )
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("user with ID :  " + id + " not found");
@@ -295,7 +296,7 @@ class UserServiceImplTest {
         // When
         // Then
         assertThatThrownBy(
-                () -> underTest.findById(null)
+                () -> underTest.getUserById(null)
         ).isInstanceOf(InvalidArgumentException.class)
                 .hasMessageContaining("id must not be null");
 

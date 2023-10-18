@@ -1,9 +1,11 @@
-package edu.yacoubi.todobackend.service.impl;
+package edu.yacoubi.todobackend.service.decktop.impl;
 
 import edu.yacoubi.todobackend.model.Category;
+import edu.yacoubi.todobackend.model.Todo;
 import edu.yacoubi.todobackend.repository.CategoryRepository;
-import edu.yacoubi.todobackend.service.CategoryService;
-import lombok.AllArgsConstructor;
+import edu.yacoubi.todobackend.repository.TodoRepository;
+import edu.yacoubi.todobackend.service.decktop.CategoryService;
+import edu.yacoubi.todobackend.service.decktop.TodoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,5 +43,38 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(Long id) {
 
+    }
+
+    @Service
+    @RequiredArgsConstructor
+    @Slf4j
+    public static class TodoServiceImpl implements TodoService {
+
+        private final TodoRepository todoRepository;
+
+        @Override
+        public void save(Todo todo) {
+
+        }
+
+        @Override
+        public List<Todo> findAll() {
+            return null;
+        }
+
+        @Override
+        public Todo findById(Long id) {
+            return null;
+        }
+
+        @Override
+        public List<Todo> findByCategory(Long categoryId) {
+            return null;
+        }
+
+        @Override
+        public void delete(Long id) {
+
+        }
     }
 }

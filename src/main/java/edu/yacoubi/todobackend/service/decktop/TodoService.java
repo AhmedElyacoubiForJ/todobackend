@@ -1,4 +1,4 @@
-package edu.yacoubi.todobackend.service;
+package edu.yacoubi.todobackend.service.decktop;
 
 import edu.yacoubi.todobackend.model.Todo;
 
