@@ -6,7 +6,6 @@ import edu.yacoubi.todobackend.service.api.CategoryServiceAPI;
 import edu.yacoubi.todobackend.service.delegate.CategoryServiceDelegate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,11 +31,10 @@ public class CategoryServiceAPIImpl implements CategoryServiceAPI {
                 .createNewCategory(toCategory);
         log.debug("CategoryServiceAPIImpl:CategoryServiceDelegate call return");
 
-        // CategoryDTO toUserDTOResult = new ModelMapper().map(categoryResult, CategoryDTO.class);
-        CategoryDTO toUserDTOResult = CategoryDTO.fromEntity(categoryResult);
+        CategoryDTO toCategoryDTOResult = CategoryDTO.fromEntity(categoryResult);
 
-        log.info("UserServiceAPIImpl:createNewUser execution end.");
-        return toUserDTOResult;
+        log.info("CategoryServiceAPIImpl:creatNewCategory execution end.");
+        return toCategoryDTOResult;
     }
 
     @Override
@@ -50,7 +48,7 @@ public class CategoryServiceAPIImpl implements CategoryServiceAPI {
     }
 
     @Override
-    public List<CategoryDTO> findAllByUserId(Long userId) {
+    public List<CategoryDTO> getAllCategoriesByUserId(Long userId) {
         return null;
     }
 

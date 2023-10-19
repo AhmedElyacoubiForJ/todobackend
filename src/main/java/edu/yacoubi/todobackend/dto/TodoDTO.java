@@ -39,7 +39,9 @@ public class TodoDTO {
         todo.setDone(todoDTO.isDone());
         todo.setFavorite(todoDTO.isFavorite());
         todo.setStartDate(ZonedDateTime.now());
-        todo.setCategory(CategoryDTO.toEntity(todoDTO.getCategoryDTO()));
+        todo.setCategory(
+                CategoryDTO.toEntity(todoDTO.getCategoryDTO())
+        );
 
         return todo;
     }

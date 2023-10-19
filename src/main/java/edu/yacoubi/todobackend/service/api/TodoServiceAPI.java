@@ -5,7 +5,7 @@ import edu.yacoubi.todobackend.dto.TodoDTO;
 import java.util.List;
 
 public interface TodoServiceAPI {
-    void createNewTodo(TodoDTO todoDTO);
+    TodoDTO createNewTodo(TodoDTO todoDTO);
     List<TodoDTO> getAllTodos();
     TodoDTO getTodoById(Long id);
     List<TodoDTO> getTodosByCategoryId(Long categoryId);

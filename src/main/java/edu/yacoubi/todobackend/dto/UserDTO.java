@@ -36,7 +36,11 @@ public class UserDTO {
     //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<CategoryDTO> categories = new ArrayList<>();
 
-    public UserDTO(String firstName, String lastName, String email, String userName, String password) {
+    public UserDTO(String firstName,
+                   String lastName,
+                   String email,
+                   String userName,
+                   String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -55,7 +59,9 @@ public class UserDTO {
         user.setPassword(userDTO.getPassword());
         user.setCategories(
                 userDTO.getCategories() != null ?
-                        userDTO.getCategories().stream().map(CategoryDTO::toEntity).collect(Collectors.toList())
+                        userDTO.getCategories().stream()
+                                .map(CategoryDTO::toEntity)
+                                .collect(Collectors.toList())
                         : null
         );
 
@@ -71,9 +77,11 @@ public class UserDTO {
                 .password(user.getPassword())
                 .email(user.getEmail())
                 .categories(
-                        user.getCategories() != null ?
-                                user.getCategories().stream().map(CategoryDTO::fromEntity).collect(Collectors.toList()) :
-                                null
+                        user.getCategories() != null
+                                ? user.getCategories().stream()
+                                        .map(CategoryDTO::fromEntity)
+                                        .collect(Collectors.toList())
+                                : null
                 )
                 .build();
     }

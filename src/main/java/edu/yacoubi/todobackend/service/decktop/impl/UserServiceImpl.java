@@ -2,7 +2,7 @@ package edu.yacoubi.todobackend.service.decktop.impl;
 
 import edu.yacoubi.todobackend.exception.EntityNotFoundException;
 import edu.yacoubi.todobackend.exception.InvalidArgumentException;
-import edu.yacoubi.todobackend.exception.UserServiceBusinessException;
+import edu.yacoubi.todobackend.exception.ServiceBusinessException;
 import edu.yacoubi.todobackend.model.AppUser;
 import edu.yacoubi.todobackend.repository.UserRepository;
 import edu.yacoubi.todobackend.service.decktop.UserService;
@@ -38,7 +38,10 @@ public class UserServiceImpl implements UserService {
                     "Exception occurred while persisting appUser to database, Exception message {}",
                     ex.getMessage()
             );
-            throw new UserServiceBusinessException("Exception occurred while save a new appUser");
+            throw new ServiceBusinessException(
+                    "Exception occurred while save a new appUser",
+                    ex.getCause()
+            );
         }
 
         log.info("UserServiceImpl:createNewUser execution end.");

@@ -77,4 +77,10 @@ public class Todo {
             )
     )
     private Category category;
+
+    public Todo(String task, String description, ZonedDateTime startDate) {
+        this.task = task;
+        this.description = description;
+        this.startDate = startDate;
+    }
 }

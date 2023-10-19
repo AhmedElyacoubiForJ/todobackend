@@ -43,6 +43,7 @@ public class CategoryDTO {
         category.setId(categoryDTO.getId());
         category.setName(categoryDTO.getName());
         category.setDescription(categoryDTO.getDescription());
+        category.setAppUser(UserDTO.toEntity(categoryDTO.getUserDTO()));
 
         return category;
     }
@@ -52,10 +53,13 @@ public class CategoryDTO {
                 .id(category.getId())
                 .name(category.getName())
                 .description(category.getDescription())
+                .userDTO(UserDTO.fromEntity(category.getAppUser()))
                 .todos(
-                        category.getTodos() != null ?
-                                category.getTodos().stream().map(TodoDTO::fromEntity).collect(Collectors.toList()) :
-                                null
+                        category.getTodos() != null
+                                ? category.getTodos().stream()
+                                    .map(TodoDTO::fromEntity)
+                                    .collect(Collectors.toList())
+                                : null
                 )
                 .build();
     }

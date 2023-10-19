@@ -8,6 +8,7 @@ public interface CategoryServiceAPI {
     CategoryDTO creatNewCategory(CategoryDTO categoryDTO);
     List<CategoryDTO> getAllCategories();
     CategoryDTO getCategoryById(Long id);
-    List<CategoryDTO> findAllByUserId(Long userId);
+
+    List<CategoryDTO> getAllCategoriesByUserId(Long userId);
     void deleteCategoryById(Long id);
 }
