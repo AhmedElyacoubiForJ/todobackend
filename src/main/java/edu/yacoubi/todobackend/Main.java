@@ -30,10 +30,9 @@ public class Main {
 			CategoryServiceAPI categoryServiceAPI) {
 
 		return args -> {
-			//
+			
 			log.info("Main:commandLineRunner execution started.");
 
-			//AppUser newAppUser = generateAppUser();
 			UserDTO userDTO = generateUserDTO();
 
 
@@ -46,17 +45,6 @@ public class Main {
 			);
 
 			CategoryDTO categoryDTOResult = categoryServiceAPI.creatNewCategory(categoryDTO);
-
-			//Category categoryOne = categoryService.save(category);
-
-			// create some todos & connect them to category
-
-			System.out.println();
-
-
-			//	AppUser userByEmail = userService.getUserByEmail(newAppUser.getEmail());
-//				System.out.println(userByEmail);
-
 
 			log.info("Main:commandLineRunner execution end.");
 		};

@@ -23,13 +23,8 @@ public class CategoryServiceAPIImpl implements CategoryServiceAPI {
         log.info("CategoryServiceAPIImpl:creatNewCategory execution started.");
 
         log.debug("CategoryServiceAPIImpl:creatNewCategory request parameter {}", categoryDTO);
-        //ModelMapper modelMapper = new ModelMapper(); // duplicate TODO
-
-        //Category toCategory = modelMapper.map(categoryDTO, Category.class);
-
 
         Category toCategory = CategoryDTO.toEntity(categoryDTO);
-
 
         log.debug("CategoryServiceAPIImpl:CategoryServiceDelegate call start");
         Category categoryResult = categoryServiceDelegate
@@ -60,7 +55,5 @@ public class CategoryServiceAPIImpl implements CategoryServiceAPI {
     }
 
     @Override
-    public void deleteCategoryById(Long id) {
-
-    }
+    public void deleteCategoryById(Long id) {}
 }

@@ -4,10 +4,8 @@ import edu.yacoubi.todobackend.dto.UserDTO;
 import edu.yacoubi.todobackend.model.AppUser;
 import edu.yacoubi.todobackend.service.api.UserServiceAPI;
 import edu.yacoubi.todobackend.service.delegate.UserServiceDelegate;
-import edu.yacoubi.todobackend.util.EntityValueMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,13 +21,8 @@ public class UserServiceAPIImpl implements UserServiceAPI {
         log.info("UserServiceAPIImpl:createNewUser execution started.");
 
         log.debug("UserServiceAPIImpl:createNewUser request parameter {}", userDTO);
-        ModelMapper modelMapper = new ModelMapper();
-        // test
-        //AppUser toAppUser = modelMapper.map(userDTO, AppUser.class);
 
         AppUser toAppUser = UserDTO.toEntity(userDTO);
-
-        //AppUser toAppUser = EntityValueMapper.convertToEntity(userDTO);
 
         log.debug("UserServiceAPIImpl:UserServiceDelegate call start");
         AppUser appUserResult = userServiceDelegate
@@ -37,10 +30,7 @@ public class UserServiceAPIImpl implements UserServiceAPI {
                 .createNewUser(toAppUser);
         log.debug("UserServiceAPIImpl:UserServiceDelegate call return");
 
-        //UserDTO toUserDTOResult  = EntityValueMapper.convertToDTO(appUserResult);
-        //UserDTO toUserDTOResult = new ModelMapper().map(appUserResult, UserDTO.class);
         UserDTO toUserDTOResult = UserDTO.fromEntity(appUserResult);
-
 
         log.info("UserServiceAPIImpl:createNewUser execution end.");
         return toUserDTOResult;
@@ -57,8 +47,7 @@ public class UserServiceAPIImpl implements UserServiceAPI {
     }
 
     @Override
-    public void deleteUserById(Long id) {
-    }
+    public void deleteUserById(Long id) {}
 
     @Override
     public UserDTO getUserByEmail(String email) {
