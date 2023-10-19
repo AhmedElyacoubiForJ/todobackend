@@ -38,7 +38,7 @@ public class Main {
 
 			AppUser appUser = generateAppUser();
 
-			// from client
+			// from API client simulation
 			UserDTO userDTO = UserDTO.fromEntity(appUser);
 
 			UserDTO userDTOResult = userServiceAPI.createNewUser(userDTO);
@@ -63,11 +63,6 @@ public class Main {
 			todoServiceAPI.createNewTodo(
 					todoDTO
 			);
-
-
-
-
-
 
 			log.info("Main:commandLineRunner execution end.");
 		};

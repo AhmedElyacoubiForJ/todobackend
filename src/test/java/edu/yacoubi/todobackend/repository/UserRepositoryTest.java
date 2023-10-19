@@ -1,6 +1,7 @@
 package edu.yacoubi.todobackend.repository;
 
 import edu.yacoubi.todobackend.model.AppUser;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,6 +86,7 @@ class UserRepositoryTest {
         // Then
         String message = "not-null property references a null or transient value : " +
                 "edu.yacoubi.todobackend.model.AppUser.firstName";
+        message = "could not execute statement; SQL [n/a]; constraint [null]";
         assertThatThrownBy(
                 () -> underTest.save(appUser)
         )
@@ -108,6 +110,8 @@ class UserRepositoryTest {
         // Then
         String message = "not-null property references a null or transient value : " +
                 "edu.yacoubi.todobackend.model.AppUser.lastName";
+
+        message = "could not execute statement; SQL [n/a]; constraint [null]";
         assertThatThrownBy(
                 () -> underTest.save(appUser)
         )
@@ -131,6 +135,7 @@ class UserRepositoryTest {
         // Then
         String message = "not-null property references a null or transient value : " +
                 "edu.yacoubi.todobackend.model.AppUser.email";
+        message = "could not execute statement; SQL [n/a]; constraint [null]";
         assertThatThrownBy(
                 () -> underTest.save(appUser)
         )
@@ -154,6 +159,7 @@ class UserRepositoryTest {
         // Then
         String message = "not-null property references a null or transient value : " +
                 "edu.yacoubi.todobackend.model.AppUser.userName";
+        message = "could not execute statement; SQL [n/a]; constraint [null]";
         assertThatThrownBy(
                 () -> underTest.save(appUser)
         )
@@ -177,6 +183,7 @@ class UserRepositoryTest {
         // Then
         String message = "not-null property references a null or transient value : " +
                 "edu.yacoubi.todobackend.model.AppUser.password";
+        message = "could not execute statement; SQL [n/a]; constraint [null]";
         assertThatThrownBy(
                 () -> underTest.save(appUser)
         )
