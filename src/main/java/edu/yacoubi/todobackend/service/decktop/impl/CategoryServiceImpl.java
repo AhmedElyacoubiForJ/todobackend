@@ -1,5 +1,7 @@
 package edu.yacoubi.todobackend.service.decktop.impl;
 
+import edu.yacoubi.todobackend.exception.InvalidArgumentException;
+import edu.yacoubi.todobackend.exception.UserServiceBusinessException;
 import edu.yacoubi.todobackend.model.Category;
 import edu.yacoubi.todobackend.repository.CategoryRepository;
 import edu.yacoubi.todobackend.service.decktop.CategoryService;
@@ -19,7 +21,30 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category createNewCategory(Category category) {
-        return null;
+
+        log.info("CategoryServiceImpl:createNewCategory execution started.");
+
+        if (category == null) {
+            log.error("Exception occurred while validating parameter, category is null");
+            throw new InvalidArgumentException("category must not be null");
+        }
+
+        Category categoryResult;
+        try {
+            log.debug("CategoryServiceImpl:createNewCategory call parameter {}", category);
+            categoryResult = categoryRepository.save(category);
+            log.debug("UserServiceImpl:createNewUser entity result {}", categoryResult);
+        } catch (Exception ex) {
+            log.error(
+                    "Exception occurred while persisting category to database, Exception message {}",
+                    ex.getMessage()
+            );
+            throw new UserServiceBusinessException("Exception occurred while save a new appUser");
+        }
+
+        log.info("CategoryServiceImpl:createNewCategory execution end.");
+
+        return categoryResult;
     }
 
     @Override

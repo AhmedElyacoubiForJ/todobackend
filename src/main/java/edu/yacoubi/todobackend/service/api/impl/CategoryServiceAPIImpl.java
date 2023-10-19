@@ -1,10 +1,12 @@
 package edu.yacoubi.todobackend.service.api.impl;
 
 import edu.yacoubi.todobackend.dto.CategoryDTO;
-import edu.yacoubi.todobackend.repository.CategoryRepository;
+import edu.yacoubi.todobackend.model.Category;
 import edu.yacoubi.todobackend.service.api.CategoryServiceAPI;
+import edu.yacoubi.todobackend.service.delegate.CategoryServiceDelegate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +16,32 @@ import java.util.List;
 @Slf4j
 public class CategoryServiceAPIImpl implements CategoryServiceAPI {
 
-    private final CategoryRepository repository;
+    private final CategoryServiceDelegate categoryServiceDelegate;
 
     @Override
     public CategoryDTO creatNewCategory(CategoryDTO categoryDTO) {
-        return null;
+        log.info("CategoryServiceAPIImpl:creatNewCategory execution started.");
+
+        log.debug("CategoryServiceAPIImpl:creatNewCategory request parameter {}", categoryDTO);
+        //ModelMapper modelMapper = new ModelMapper(); // duplicate TODO
+
+        //Category toCategory = modelMapper.map(categoryDTO, Category.class);
+
+
+        Category toCategory = CategoryDTO.toEntity(categoryDTO);
+
+
+        log.debug("CategoryServiceAPIImpl:CategoryServiceDelegate call start");
+        Category categoryResult = categoryServiceDelegate
+                .getCategoryService()
+                .createNewCategory(toCategory);
+        log.debug("CategoryServiceAPIImpl:CategoryServiceDelegate call return");
+
+        // CategoryDTO toUserDTOResult = new ModelMapper().map(categoryResult, CategoryDTO.class);
+        CategoryDTO toUserDTOResult = CategoryDTO.fromEntity(categoryResult);
+
+        log.info("UserServiceAPIImpl:createNewUser execution end.");
+        return toUserDTOResult;
     }
 
     @Override

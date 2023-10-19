@@ -25,7 +25,9 @@ public class UserServiceAPIImpl implements UserServiceAPI {
         log.debug("UserServiceAPIImpl:createNewUser request parameter {}", userDTO);
         ModelMapper modelMapper = new ModelMapper();
         // test
-        AppUser toAppUser = modelMapper.map(userDTO, AppUser.class);
+        //AppUser toAppUser = modelMapper.map(userDTO, AppUser.class);
+
+        AppUser toAppUser = UserDTO.toEntity(userDTO);
 
         //AppUser toAppUser = EntityValueMapper.convertToEntity(userDTO);
 
@@ -36,7 +38,9 @@ public class UserServiceAPIImpl implements UserServiceAPI {
         log.debug("UserServiceAPIImpl:UserServiceDelegate call return");
 
         //UserDTO toUserDTOResult  = EntityValueMapper.convertToDTO(appUserResult);
-        UserDTO toUserDTOResult = new ModelMapper().map(appUserResult, UserDTO.class);
+        //UserDTO toUserDTOResult = new ModelMapper().map(appUserResult, UserDTO.class);
+        UserDTO toUserDTOResult = UserDTO.fromEntity(appUserResult);
+
 
         log.info("UserServiceAPIImpl:createNewUser execution end.");
         return toUserDTOResult;

@@ -45,6 +45,7 @@ public class Main {
 					userDTOResult
 			);
 
+			CategoryDTO categoryDTOResult = categoryServiceAPI.creatNewCategory(categoryDTO);
 
 			//Category categoryOne = categoryService.save(category);
 
