@@ -1,14 +1,11 @@
 package edu.yacoubi.todobackend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.Access.*;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "AppUser")
@@ -83,7 +80,7 @@ public class AppUser {
             mappedBy = "appUser",
             orphanRemoval = true,
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Category> categories = new ArrayList<>();
@@ -99,5 +96,4 @@ public class AppUser {
         this.userName = userName;
         this.password = password;
     }
-
 }

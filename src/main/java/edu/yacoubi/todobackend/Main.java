@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import java.time.ZonedDateTime;
 
 @SpringBootApplication
 @Slf4j
+@EnableFeignClients
 public class Main {
 
 	public static void main(String[] args) {
@@ -60,11 +62,13 @@ public class Main {
 			TodoDTO todoDTO = TodoDTO.fromEntity(todo);
 			todoDTO.setCategoryDTO(categoryDTOResult);
 
-			todoServiceAPI.createNewTodo(
-					todoDTO
-			);
+            TodoDTO newTodo = todoServiceAPI.createNewTodo(
+                    todoDTO
+            );
 
-			log.info("Main:commandLineRunner execution end.");
+            System.out.println(newTodo);
+
+            log.info("Main:commandLineRunner execution end.");
 		};
 	}
 

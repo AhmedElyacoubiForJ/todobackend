@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,11 @@ public class UserServiceAPIImpl implements UserServiceAPI {
 
     @Override
     public List<UserDTO> getUsers() {
-        return null;
+        List<AppUser> appUsers = userServiceDelegate.getUserService().getUsers();
+        List<UserDTO> userDTOS = appUsers.stream().map(appUser -> {
+            return UserDTO.fromEntity(appUser);
+        }).collect(Collectors.toList());
+        return userDTOS;
     }
 
     @Override

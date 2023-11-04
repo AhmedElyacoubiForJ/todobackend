@@ -55,22 +55,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AppUser getUserById(Long id) {
-        log.info("UserServiceImpl findById...");
+        log.info("UserServiceImpl:getUserById execution started.");
 
         if (id == null) {
-            log.error("id is null");
-            throw new InvalidArgumentException("user id must not be null");
+            log.error("Exception occurred while validating parameter, id is null");
+            throw new InvalidArgumentException("id must not be null");
         }
+        // Refactor TODO ServiceBusinessException
 
-        return userRepository.findById(id)
+
+        AppUser appUser = userRepository.findById(id)
                 .orElseThrow(() -> {
                     String message = "user with ID :  " + id + " not found";
-                    EntityNotFoundException eNfE =
-                            new EntityNotFoundException(message);
-                    log.error("error in getting user with ID :  {}", id, eNfE);
+                    EntityNotFoundException eNfE = new EntityNotFoundException(message);
+                    log.error(
+                            "Exception occurred while getting user by id {} from database, Exception message {}",
+                            id,
+                            eNfE.getMessage()
+                    );
                     return eNfE;
-                }
-        );
+                });
+
+        log.info("UserServiceImpl:getUserById execution end.");
+        return appUser;
     }
 
     @Override
@@ -86,21 +93,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AppUser getUserByEmail(String email) {
-        // TODO to improve
-        log.info("UserServiceImpl:findAppUserByEmail execution started.");
+        log.info("UserServiceImpl:getUserByEmail execution started.");
 
         if (email == null) {
-            log.error("email is null");
+            log.error("Exception occurred while validating parameter, email is null");
             throw new InvalidArgumentException("email must not be null");
         }
 
         if (email.isEmpty()) {
             log.error("email is empty");
+            log.error("Exception occurred while validating parameter, email is empty");
             throw new InvalidArgumentException("email must not be empty");
         }
 
-        log.debug("ProductService:createNewProduct request parameters {}", email);
-
+        log.debug("UserServiceImpl:getUserByEmail request parameters {}", email);
 
         AppUser appUserResponse = userRepository.findAppUserByEmail(email)
                 .orElseThrow(
@@ -111,7 +117,9 @@ public class UserServiceImpl implements UserService {
                             log.error("error in getting user with EMAIL :  {}", email, eNfE);
                             return eNfE;
                         });
-        log.info("UserServiceImpl:findAppUserByEmail execution ended.");
+        log.debug("UserServiceImpl:getUserByEmail entity result {}", appUserResponse);
+
+        log.info("UserServiceImpl:getUserByEmail execution end.");
         return appUserResponse;
     }
 }
